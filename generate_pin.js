@@ -46,5 +46,12 @@ stringify(pins, {
     console.log(err);
   }
 
-  fs.writeFileSync(`${__dirname}/pins.csv`, output);
+  let dateStamp = (new Date()).toISOString().slice(0,10).replace(/-/g,"");
+  let dir = `${__dirname}/csv`;
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+  
+  fs.writeFileSync(`${dir}/${dateStamp}-pins.csv`, output);
 });
