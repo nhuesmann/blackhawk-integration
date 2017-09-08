@@ -7,7 +7,7 @@ Generates PIN codes for desired UPCs and quantities and creates a CSV of the PIN
 Edit `order.json` and change the quantities for each UPC to reflect desired
 order quantities. Then, from the console:
 ```shell
-$ node generate_pin.js
+$ node generate_pins.js
 ```
 The created CSV will be found in the `/csv` directory.
 
