@@ -1,25 +1,21 @@
-const stringify = require('csv-stringify');
-const fs = require('fs');
-const request = require('request-promise');
-const order = require('./order.json');
+const generatePins = async (modules) => {
+  const { fs, request, csvDir, log, endpoint, stringify, order } = modules;
 
-var columns = {};
-var pins = [];
+  var columns = {};
+  var pins = [];
 
-// TODO: add the url to the env/config (after merging the projects)
-const generatePins = async () => {
-  var lastPin = await request('https://apps-staging.chefd.com/v1/lastpin');
+  var lastPin = await request(endpoint);
 
-  const random = () => {
+  function random () {
     return Math.floor(1000000 + Math.random() * 9000000);
   };
 
-  const incrementString = (string) => {
+  function incrementString (string) {
     const toInt = +string + 1;
     return ('0000000' + toInt).slice(-7);
   };
 
-  const generate = (lastPinArg, quantity) => {
+  function generate (lastPinArg, quantity) {
     let counter = lastPinArg.slice(-9).slice(0, 7);
 
     for (let i = 0; i < quantity; i++) {
@@ -50,14 +46,13 @@ const generatePins = async () => {
     }
 
     let dateStamp = (new Date()).toISOString().slice(0,10).replace(/-/g,"");
-    let dir = `${__dirname}/csv`;
 
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
-
-    fs.writeFileSync(`${dir}/${dateStamp}-pins.csv`, output);
+    fs.writeFileSync(`${csvDir}/${dateStamp}-pins.csv`, output);
   });
+
+  let orderTotal = order.reduce((prev, curr) => curr.quantity + prev.quantity);
+
+  fs.appendFileSync(log, `${new Date().toString()} Successfully generated ${orderTotal} PINs.\n`);
 };
 
-generatePins();
+module.exports = { generatePins };

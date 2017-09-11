@@ -4,14 +4,21 @@
   "description": "",
   "main": "generate_pin.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate_pins_staging": "node app.js --generate_pins --staging",
+    "generate_pins_production": "node app.js --generate_pins --production",
+    "update_database_staging": "node app.js --update_database --staging",
+    "update_database_production": "node app.js --update_database --production",
+    "blackhawk_init": "node app.js --init"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "csv-parse": "^1.2.1",
     "csv-stringify": "^1.0.4",
     "request": "^2.81.0",
-    "request-promise": "^4.2.1"
+    "request-promise": "^4.2.1",
+    "yargs": "^8.0.2"
   }
 }
