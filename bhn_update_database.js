@@ -40,9 +40,13 @@ const updateDatabase = async (modules) => {
     }
   });
 
+  let counter = giftCards.length;
+
+  // Main loop
   for (let i = 0; i < giftCards.length; i += batch_size) {
     let chunk = giftCards.slice(i, i + batch_size);
     let message;
+    counter -= chunk.length;
 
     let options = {
       method: 'POST',
@@ -55,18 +59,21 @@ const updateDatabase = async (modules) => {
 
     try {
       const response = await request(options);
-      message = `${new Date().toString()} ${response.data.response}\n`;
+      message = `${response.data.response} ${counter} gift cards remaining.`;
     } catch(e) {
-      message = `${new Date().toString()} ${e.error.message} ${chunk.length} cards starting at position ${i}.`;
+      message = `${e.error.message} ${chunk.length} cards starting at position ${i}. ${counter} gift cards remaining.`;
     }
 
-    fs.appendFileSync(log, message);
+    // Log the results
+    fs.appendFileSync(log, `${new Date().toString()} ${message}\n`);
+    console.log(message);
   }
 
   // Archive the CSV
   fs.renameSync(`${csvDir}/${getCSVName()}`, `${csvDir}/../archive/${getCSVName()}`);
 
   fs.appendFileSync(log, `${new Date().toString()} All gift cards processed.\n`);
+  console.log('All gift cards processed.');
 };
 
 module.exports = { updateDatabase };

@@ -51,8 +51,10 @@ const generatePins = async (modules) => {
   });
 
   let orderTotal = order.reduce((prev, curr) => curr.quantity + prev.quantity);
+  let message = `Successfully generated ${orderTotal} PINs.`;
 
-  fs.appendFileSync(log, `${new Date().toString()} Successfully generated ${orderTotal} PINs.\n`);
+  fs.appendFileSync(log, `${new Date().toString()} ${message}\n`);
+  console.log(message);
 };
 
 module.exports = { generatePins };
