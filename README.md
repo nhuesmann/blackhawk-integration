@@ -51,7 +51,7 @@ $ npm run generate_pins_staging
 ```
 **Production**
 ```shell
-$ npm run generate_pins_staging
+$ npm run generate_pins_production
 ```
 
 The created CSV will be found in the `/csv/generated_pins` directory.
